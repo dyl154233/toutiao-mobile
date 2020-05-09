@@ -1,23 +1,7 @@
 <template>
   <div id="app">
-    <h2>黑马头条</h2>
     <!-- 路由出口 -->
     <router-view/>
-    <van-button type="default">默认按钮</van-button>
-    <van-button type="primary">主要按钮</van-button>
-    <van-button type="info">信息按钮</van-button>
-    <van-button type="warning">警告按钮</van-button>
-    <van-button type="danger">危险按钮</van-button>
-    <van-cell-group>
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" label="描述信息" />
-    </van-cell-group>
-    <van-cell title="单元格" is-link />
-    <van-cell title="单元格" is-link value="内容" />
-    <van-cell title="单元格" is-link arrow-direction="down" value="内容" />
-    <div class="div">盒子</div>
-    <i class="toutiao toutiao-wode"></i>
-    <i class="toutiao toutiao-shouji"></i>
   </div>
 </template>
 
