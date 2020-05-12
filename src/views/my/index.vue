@@ -1,7 +1,9 @@
 <template>
   <div class="my-container">
-    <van-cell-group>
+    <van-cell-group class="my-info">
       <van-cell
+        class="base-info"
+        :border="false"
         value="内容"
         center
       >
@@ -20,7 +22,7 @@
         >编辑资料</van-button>
       </van-cell>
 
-      <van-grid>
+      <van-grid :border="false">
         <van-grid-item>
           <div slot="text">
             <div class="span">132</div>
@@ -78,6 +80,16 @@ export default {
 
 <style scoped lang="less">
 .my-container {
+  .my-info {
+    background: url("./banner.png") no-repeat;
+    background-size: cover;
+    .base-info {
+      background-color: unset;
+    }
+    /deep/  .van-grid-item__content {
+      background-color: unset;
+    }
+  }
   .exit-btn {
     text-align: center
   }
