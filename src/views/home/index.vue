@@ -13,20 +13,27 @@
     <!-- 导航栏 -->
     <!-- 文章列表页 -->
       <van-tabs v-model="active">
-        <van-tab title="标签 1">内容 1</van-tab>
-        <van-tab title="标签 2">内容 2</van-tab>
-        <van-tab title="标签 3">内容 3</van-tab>
-        <van-tab title="标签 4">内容 4</van-tab>
+        <van-tab
+          :title="channels.name"
+          v-for="channels in channels"
+          :key="channels.id"
+        >
+          <!-- {{ channels.name }} -->
+          <article-list :channel="channels" />
+        </van-tab>
       </van-tabs>
     <!-- 文章列表页 -->
   </div>
 </template>
 
 <script>
-// import { getUserChannels } from '@/api/user'
+import { getUserChannels } from '@/api/user'
+import ArticleList from './components/article-list'
 export default {
   name: 'HomeIndex',
-  components: {},
+  components: {
+    ArticleList
+  },
   props: {},
   data () {
     return {
@@ -42,8 +49,9 @@ export default {
   mounted () {},
   methods: {
     async loadChannels () {
-      // const { data } = getUserChannels()
-      // this.channels = data.data.channels
+      const { data } = await getUserChannels()
+      console.log(data)
+      this.channels = data.data.channels
     }
   }
 }
