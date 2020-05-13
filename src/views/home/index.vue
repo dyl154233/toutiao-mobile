@@ -50,7 +50,7 @@ export default {
   methods: {
     async loadChannels () {
       const { data } = await getUserChannels()
-      console.log(data)
+      // console.log(data)
       this.channels = data.data.channels
     }
   }

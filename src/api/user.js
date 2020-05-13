@@ -30,7 +30,7 @@ export const getUserInfo = () => {
   })
 }
 
-// 获取文章列表
+// 获取用户频道列表
 export const getUserChannels = () => {
   return request({
     method: 'GET',

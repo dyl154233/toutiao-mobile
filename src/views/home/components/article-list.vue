@@ -7,13 +7,18 @@
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <van-cell v-for="item in list" :key="item" :title="item" />
+        <van-cell
+          v-for="(article, index) in articles"
+          :key="index"
+          :title="article.title"
+        />
       </van-list>
     </van-pull-refresh>
   </div>
 </template>
 
 <script>
+import { getArticles } from '@/api/article'
 export default {
   name: 'ArticleList',
   components: {},
@@ -25,9 +30,10 @@ export default {
   },
   data () {
     return {
-      list: [],
+      articles: [],
       loading: false,
       finished: false,
+      timestamp: '',
       refreshing: false
     }
   },
@@ -36,22 +42,27 @@ export default {
   created () {},
   mounted () {},
   methods: {
-    onLoad () {
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.list = []
-          this.refreshing = false
-        }
-
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-
-        this.loading = false
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 1000)
+    async onLoad () {
+      // console.log(onLoad)
+      // 1. 请求获取数据
+      const { data } = await getArticles({
+        channel_id: this.channel.id,
+        timestamp: this.timestamp || Date.now(),
+        with_top: 1
+      })
+      // console.log(data)
+      // 2. 把数据放到 articles 数组中
+      this.articles.push(...data.data.results)
+      // 3. 设置本次加载状态结束，它才可以判断是否需要加载下一次，否则就会永远的停在这里
+      this.loading = false
+      // 4. 数据全部加载完成
+      if (data.data.results.length) {
+        // 更新获取下一页数据的页码
+        this.timestamp = data.data.pre_timestamp
+      } else {
+        // 没有数据了，把加载状态设置结束，不再触发加载更多
+        this.finished = true
+      }
     },
     onRefresh () {
       // 清空列表数据
