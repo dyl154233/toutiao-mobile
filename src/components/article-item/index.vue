@@ -16,9 +16,9 @@
             />
           </div>
       </div>
-      <div class="lable-wrap">
+      <div class="label-wrap">
         <span>{{ article.aut_name }}</span>
-        <span>{{ article.comm_count }}</span>
+        <span>{{ article.comm_count }}评论</span>
         <span>{{ article.pubdate }}</span>
       </div>
     </div>
@@ -78,10 +78,18 @@ export default {
         padding-right: 5px;
       }
       .cover-image {
-          width: 116px;
-          height: 73px;
+        width: 100%;
+        height: 73px;
       }
     }
   }
+  .label-wrap {
+    font-size: 11px;
+    color: #b4b4b4;
+    span {
+      margin-right: 12px;
+    }
+  }
+
 }
 </style>
