@@ -12,16 +12,16 @@
     </van-nav-bar>
     <!-- 导航栏 -->
     <!-- 文章列表页 -->
-      <van-tabs v-model="active">
-        <van-tab
-          :title="channels.name"
-          v-for="channels in channels"
-          :key="channels.id"
-        >
-          <!-- {{ channels.name }} -->
-          <article-list :channel="channels" />
-        </van-tab>
-      </van-tabs>
+    <van-tabs class="channel-tabs" v-model="active">
+      <van-tab
+        :title="channels.name"
+        v-for="channels in channels"
+        :key="channels.id"
+      >
+        <!-- {{ channels.name }} -->
+        <article-list :channel="channels" />
+      </van-tab>
+    </van-tabs>
     <!-- 文章列表页 -->
   </div>
 </template>
@@ -71,6 +71,18 @@ export default {
     }
     .van-title {
       font-size: 14px;
+    }
+  }
+  .channel-tabs {
+    /deep/ .van-tab {
+      border-right: 1px solid #edeff3;
+      border-bottom: 1px solid #edeff3;
+    }
+    /deep/ .van-tabs__line {
+      bottom: 20px;
+      width: 15px !important;
+      height: 3px;
+      background-color: #3296fa;
     }
   }
 }
