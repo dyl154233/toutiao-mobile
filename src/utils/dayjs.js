@@ -1,4 +1,5 @@
-// 初始化day相关配置
+// 初始化 dayjs 相关配置
+
 import Vue from 'vue'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'

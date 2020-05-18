@@ -18,7 +18,7 @@ export const addUserChannel = data => {
   })
 }
 
-// 删除用户频道
+// 删除用户指定频道
 export const deleteUserChannel = channelId => {
   return request({
     method: 'DELETE',

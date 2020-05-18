@@ -3,23 +3,27 @@
     <!-- 导航栏 -->
     <van-nav-bar class="app-nav-bar">
       <van-button
-        class="search-btn"
         slot="title"
+        class="search-btn"
         icon="search"
         type="info"
         round
+        size="small"
+        to="/search"
       >搜索</van-button>
     </van-nav-bar>
-    <!-- 导航栏 -->
-    <!-- 文章列表页 -->
+    <!-- /导航栏 -->
+
+    <!-- 文章频道列表 -->
     <van-tabs class="channel-tabs" v-model="active">
       <van-tab
-        :title="channels.name"
-        v-for="channels in channels"
-        :key="channels.id"
+        :title="channel.name"
+        v-for="channel in channels"
+        :key="channel.id"
       >
-        <!-- {{ channels.name }} -->
-        <article-list :channel="channels" />
+        <!-- 文章列表 -->
+        <article-list :channel="channel" />
+        <!-- /文章列表 -->
       </van-tab>
       <!-- 汉堡按钮 -->
       <div
@@ -33,9 +37,9 @@
       >
         <van-icon name="wap-nav" />
       </div>
-      <!-- 汉堡按钮 -->
     </van-tabs>
-    <!-- 文章列表页 -->
+    <!-- /文章频道列表 -->
+
     <van-popup
       v-model="isChannelEditShow"
       position="bottom"
@@ -45,7 +49,9 @@
       get-container="body"
       style="height: 100%"
     >
-      <!-- 模板中的 $event 表示事件参数 -->
+      <!--
+        模板中的 $event 表示事件参数
+       -->
       <channel-edit
         :user-channels="channels"
         :active="active"
@@ -62,6 +68,7 @@ import ArticleList from './components/article-list'
 import ChannelEdit from './components/channel-edit'
 import { mapState } from 'vuex'
 import { getItem } from '@/utils/storage'
+
 export default {
   name: 'HomeIndex',
   components: {
@@ -71,9 +78,9 @@ export default {
   props: {},
   data () {
     return {
-      active: 0,
-      channels: [],
-      isChannelEditShow: true
+      active: 0, // 控制被激活的标签
+      channels: [], // 频道列表
+      isChannelEditShow: false // 控制编辑频道的显示状态
     }
   },
   computed: {
@@ -112,20 +119,22 @@ export default {
 
 <style scoped lang="less">
 .home-container {
-  /deep/  .van-nav-bar__title {
+  /deep/ .van-nav-bar__title {
     max-width: none;
   }
   .search-btn {
     width: 277px;
     height: 32px;
-    background-color: #5babfb;
+    background: #5babfb;
+    border: none;
     .van-icon {
       font-size: 16px;
     }
-    .van-title {
+    .van-button__text {
       font-size: 14px;
     }
   }
+
   .channel-tabs {
     /deep/ .van-tab {
       border-right: 1px solid #edeff3;
@@ -135,13 +144,15 @@ export default {
       bottom: 20px;
       width: 15px !important;
       height: 3px;
-      background-color: #3296fa;
+      background: #3296fa;
     }
   }
+
   .wap-nav-placeholder {
     width: 33px;
     flex-shrink: 0;
   }
+
   .wap-nav-wrap {
     position: fixed;
     right: 0;

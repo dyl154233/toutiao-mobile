@@ -1,4 +1,4 @@
-// 本地存储模块
+// 本地存储封装模块
 export const getItem = name => {
   const data = window.localStorage.getItem(name)
   try {
@@ -9,6 +9,7 @@ export const getItem = name => {
 }
 
 export const setItem = (name, value) => {
+  // 如果 value 是对象，就把 value 转为 JSON 格式字符串再存储
   if (typeof value === 'object') {
     value = JSON.stringify(value)
   }

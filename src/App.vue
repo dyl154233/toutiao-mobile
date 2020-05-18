@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <!-- 路由出口 -->
+    <!-- 一级路由的出口，路由表中所有的顶层路由都是一级路由 -->
     <router-view/>
   </div>
 </template>
@@ -12,10 +12,9 @@ export default {
 </script>
 
 <style lang="less">
-.div {
+.box {
   width: 200px;
   height: 100px;
   background-color: pink;
-  padding: 10px;
 }
 </style>

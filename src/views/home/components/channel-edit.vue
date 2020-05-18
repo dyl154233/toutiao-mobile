@@ -6,14 +6,13 @@
         class="channel-title"
       >我的频道</div>
       <van-button
-        type="info"
+        type="danger"
         plain
         round
         size="mini"
         @click="isEdit = !isEdit"
       >{{ isEdit ? '完成' : '编辑' }}</van-button>
     </van-cell>
-
     <van-grid :gutter="10">
       <van-grid-item
         class="grid-item"
@@ -28,8 +27,8 @@
 
     <van-cell center :border="false">
       <div
-        class="channel-title"
         slot="title"
+        class="channel-title"
       >频道推荐</div>
     </van-cell>
 
@@ -46,7 +45,11 @@
 </template>
 
 <script>
-import { getAllChannels, addUserChannel, deleteUserChannel } from '@/api/channel'
+import {
+  getAllChannels,
+  addUserChannel,
+  deleteUserChannel
+} from '@/api/channel'
 import { mapState } from 'vuex'
 import { setItem } from '@/utils/storage'
 
@@ -77,6 +80,25 @@ export default {
           return userChannel.id === channel.id
         })
       })
+
+      // const arr = []
+
+      // // 遍历所有频道
+      // this.allChannels.forEach(channel => {
+      //   let flag = false
+      //   for (let i = 0; i < this.userChannels.length; i++) {
+      //     if (this.userChannels[i].id === channel.id) {
+      //       // 所有频道中的频道项属于用户频道
+      //       flag = true
+      //       break
+      //     }
+      //   }
+      //   if (!flag) {
+      //     arr.push(channel)
+      //   }
+      // })
+
+      // return arr
     }
   },
   watch: {},
@@ -92,6 +114,8 @@ export default {
 
     async onAdd (channel) {
       this.userChannels.push(channel)
+
+      // TODO: 数据持久化
       if (this.user) {
         // 登录了，数据存储到线上
         await addUserChannel({
@@ -111,30 +135,32 @@ export default {
         this.deleteChannel(channel, index)
       } else {
         // 非编辑状态，切换频道
-        this.switchChannel(channel, index)
+        this.switchChannel(index)
       }
     },
 
     async deleteChannel (channel, index) {
+      // 如果删除的是当前激活频道之前的频道
       if (index <= this.active) {
         // 更新激活频道的索引
         this.$emit('update-active', this.active - 1)
       }
       this.userChannels.splice(index, 1)
+
       // 数据持久化
       if (this.user) {
-      // 登录了，持久化到线上
+        // 登录了，持久化到线上
         await deleteUserChannel(channel.id)
       } else {
-      // 没有登录，持久化到本地
+        // 没有登录，持久化到本地
         setItem('user-channels', this.userChannels)
       }
     },
 
     switchChannel (index) {
-      console.log('切换频道')
       // 切换频道
       this.$emit('update-active', index)
+
       // 关闭弹出层
       this.$emit('close')
     }
@@ -145,10 +171,12 @@ export default {
 <style scoped lang="less">
 .channel-edit {
   padding-top: 54px;
+
   .channel-title {
     font-size: 16px;
     color: #333333;
   }
+
   .grid-item {
     width: 80px;
     height: 43px;
@@ -169,9 +197,10 @@ export default {
       z-index: 5;
     }
   }
+
   .active {
     /deep/ .van-grid-item__text {
-      color: blue !important;
+      color: red !important;
     }
   }
 }

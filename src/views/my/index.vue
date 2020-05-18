@@ -1,52 +1,47 @@
 <template>
   <div class="my-container">
-    <van-cell-group
-      class="my-info"
-      v-if="user"
-    >
+    <van-cell-group v-if="user" class="my-info">
       <van-cell
         class="base-info"
-        :border="false"
-        value="内容"
         center
+        :border="false"
       >
         <van-image
           class="avatar"
-          round
           slot="icon"
+          round
           fit="cover"
-          :src="userInfo.photo"
+          :src="currentUser.photo"
         />
-        <div slot="title" class="name">{{ userInfo.name }}</div>
+        <div class="name" slot="title">{{ currentUser.name }}</div>
         <van-button
           class="update-btn"
-          round
           size="small"
+          round
         >编辑资料</van-button>
       </van-cell>
-
-      <van-grid :border="false" class="data-info">
+      <van-grid class="data-info" :border="false">
         <van-grid-item class="data-info-item">
-          <div slot="text">
-            <div class="span">{{ userInfo.art_count }}</div>
+          <div slot="text" class="text-wrap">
+            <div class="count">{{ currentUser.art_count }}</div>
             <div class="text">头条</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
-          <div slot="text">
-            <div class="span">{{ userInfo.follow_count }}</div>
+          <div slot="text" class="text-wrap">
+            <div class="count">{{ currentUser.follow_count }}</div>
             <div class="text">关注</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
-          <div slot="text">
-            <div class="span">{{ userInfo.fans_count }}</div>
+          <div slot="text" class="text-wrap">
+            <div class="count">{{ currentUser.fans_count }}</div>
             <div class="text">粉丝</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
-          <div slot="text">
-            <div class="span">{{ userInfo.like_count }}</div>
+          <div class="text-wrap" slot="text">
+            <div class="count">{{ currentUser.like_count }}</div>
             <div class="text">获赞</div>
           </div>
         </van-grid-item>
@@ -54,15 +49,13 @@
     </van-cell-group>
 
     <div v-else class="not-login">
-      <img
-        class="mobile"
-        src="./shouji.png"
-        @click="$router.push('/login')"
-      >
+      <div @click="$router.push('/login')">
+        <img class="mobile" src="./手机.png">
+      </div>
       <div class="text">登录 / 注册</div>
     </div>
 
-    <van-grid class="nav-gri md-5" :column-num="2">
+    <van-grid class="nav-grid mb-4" :column-num="2">
       <van-grid-item
         class="nav-grid-item"
         icon-prefix="toutiao"
@@ -78,11 +71,10 @@
     </van-grid>
 
     <van-cell title="消息通知" is-link to="/" />
-    <van-cell class="md-5" title="小智同学" is-link to="/" />
-
+    <van-cell class="mb-4" title="小智同学" is-link to="/" />
     <van-cell
       v-if="user"
-      class="exit-btn"
+      class="logout-cell"
       title="退出登录"
       @click="onLogout"
     />
@@ -91,7 +83,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { getUserInfo } from '@/api/user'
+import { getCurrentUser } from '@/api/user'
 
 export default {
   name: 'MyIndex',
@@ -99,7 +91,7 @@ export default {
   props: {},
   data () {
     return {
-      userInfo: {}
+      currentUser: {} // 当前登录用户信息
     }
   },
   computed: {
@@ -107,25 +99,29 @@ export default {
   },
   watch: {},
   created () {
-    this.loadUserInfo()
+    this.loadCurrentUser()
   },
   mounted () {},
   methods: {
+    async loadCurrentUser () {
+      const { data } = await getCurrentUser()
+      this.currentUser = data.data
+    },
+
     onLogout () {
+      // 提示用户确认退出
+      // 确认 -> 处理退出
       this.$dialog.confirm({
         title: '退出提示',
         message: '确认退出吗？'
       })
-        .then(() => {
+        .then(() => { // 确认执行这里
+          // 清除用户登录状态
           this.$store.commit('setUser', null)
         })
-        .catch(() => {
+        .catch(() => { // 退出执行这里
           // on cancel
         })
-    },
-    async loadUserInfo () {
-      const { data } = await getUserInfo()
-      this.userInfo = data.data
     }
   }
 }
@@ -137,12 +133,13 @@ export default {
     background: url("./banner.png") no-repeat;
     background-size: cover;
     .base-info {
-      height: 115px;
       box-sizing: border-box;
+      height: 115px;
+      background-color: unset;
       padding-top: 38px;
       padding-bottom: 11px;
-      background-color: unset;
       .avatar {
+        box-sizing: border-box;
         width: 66px;
         height: 66px;
         border: 1px solid #fff;
@@ -155,58 +152,75 @@ export default {
       .update-btn {
         height: 16px;
         font-size: 10px;
-        color: #666;
+        color: #666666;
       }
     }
     .data-info {
-      .van-grid-item__content {
-        height: 65px;
-      }
       .data-info-item {
-        font-size: 18px;
+        height: 65px;
         color: #fff;
-        text-align: center;
-        .text {
-          font-size: 11px;
+        .text-wrap {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          .count {
+            font-size: 18px;
+          }
+          .text {
+            font-size: 11px;
+          }
         }
       }
     }
-    /deep/  .van-grid-item__content {
+    /deep/ .van-grid-item__content {
       background-color: unset;
     }
   }
+
   .not-login {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
     height: 180px;
     background: url("./banner.png") no-repeat;
     background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     .mobile {
-      height: 66px;
       width: 66px;
-      margin-bottom: 10px;
+      height: 66px;
     }
     .text {
-      font-size: 15px;
+      font-size: 14px;
       color: #fff;
     }
   }
-  .nav-grid {
+
+  /deep/ .nav-grid {
     .nav-grid-item {
       height: 70px;
-      // .toutiao-shoucang {
-      //   color: red;
-      // }
+      .toutiao {
+        font-size: 22px;
+      }
+      .toutiao-shoucang {
+        color: #eb5253;
+      }
+      .toutiao-lishi {
+        color: #ff9d1d;
+      }
+      .van-grid-item__text {
+        font-size: 14px;
+        color: #333333;
+      }
     }
   }
-  .exit-btn {
+
+  .logout-cell {
     text-align: center;
     color: #d86262;
   }
-  .md-5 {
-    margin-bottom: 5px;
+  .mb-4 {
+    margin-bottom: 4px;
   }
 }
 </style>

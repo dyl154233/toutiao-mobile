@@ -1,7 +1,5 @@
 <template>
-  <div class="video-container">
-    视频
-  </div>
+  <div class="video-container">视频页面</div>
 </template>
 
 <script>

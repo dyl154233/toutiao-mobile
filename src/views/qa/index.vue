@@ -1,7 +1,5 @@
 <template>
-  <div class="qa-conainer">
-    问答
-  </div>
+  <div class="qa-container">问答页面</div>
 </template>
 
 <script>
