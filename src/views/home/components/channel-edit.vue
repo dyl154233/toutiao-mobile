@@ -103,6 +103,10 @@ export default {
     },
 
     deleteChannel (index) {
+      if (index <= this.active) {
+        // 更新激活频道的索引
+        this.$emit('update-active', this.active - 1)
+      }
       this.userChannels.splice(index, 1)
       // 数据持久化
     },
