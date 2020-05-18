@@ -65,7 +65,7 @@ export default {
     return {
       active: 0,
       channels: [],
-      isChannelEditShow: false
+      isChannelEditShow: true
     }
   },
   computed: {},
