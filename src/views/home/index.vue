@@ -48,6 +48,7 @@
       <!-- 模板中的 $event 表示事件参数 -->
       <channel-edit
         :user-channels="channels"
+        :active="active"
         @close="isChannelEditShow = false"
         @update-active="active = $event"
       />
