@@ -45,7 +45,12 @@
       get-container="body"
       style="height: 100%"
     >
-      <channel-edit :user-channels="channels"/>
+      <!-- 模板中的 $event 表示事件参数 -->
+      <channel-edit
+        :user-channels="channels"
+        @close="isChannelEditShow = false"
+        @update-active="active = $event"
+      />
     </van-popup>
   </div>
 </template>
