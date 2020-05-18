@@ -10,15 +10,18 @@
         plain
         round
         size="mini"
-      >编辑</van-button>
+        @click="isEdit = !isEdit"
+      >{{ isEdit ? '完成' : '编辑' }}</van-button>
     </van-cell>
 
     <van-grid :gutter="10">
       <van-grid-item
         class="grid-item"
+        :icon="(isEdit && index !== 0) ? 'clear' : ''"
         v-for="(channel, index) in userChannels"
         :key="index"
         :text="channel.name"
+        @click="onUserChannelClick(index)"
       />
     </van-grid>
 
@@ -55,7 +58,8 @@ export default {
   },
   data () {
     return {
-      allChannels: [] // 所有频道数据列表
+      allChannels: [], // 所有频道数据列表
+      isEdit: false // 控制编辑的显示状态
     }
   },
   computed: {
@@ -77,9 +81,29 @@ export default {
       const { data } = await getAllChannels()
       this.allChannels = data.data.channels
     },
+
     onAdd (channel) {
       this.userChannels.push(channel)
       // TODO: 数据持久化
+    },
+
+    onUserChannelClick (index) {
+      if (this.isEdit && index !== 0) {
+        // 编辑状态，删除频道
+        this.deleteChannel(index)
+      } else {
+        // 非编辑状态，切换频道
+        this.switchChannel(index)
+      }
+    },
+
+    deleteChannel (index) {
+      this.userChannels.splice(index, 1)
+      // 数据持久化
+    },
+
+    switchChannel (index) {
+      console.log('切换频道')
     }
   }
 }
@@ -100,7 +124,15 @@ export default {
       .van-grid-item__text {
         font-size: 14px;
         color: #222;
+        margin-top: 0;
       }
+    }
+    /deep/ .van-grid-item__icon {
+      position: absolute;
+      right: -5px;
+      top: -5px;
+      font-size: 20px;
+      color: #ccc;
     }
   }
 }
