@@ -6,7 +6,7 @@
         class="channel-title"
       >我的频道</div>
       <van-button
-        type="danger"
+        type="info"
         plain
         round
         size="mini"
@@ -200,7 +200,7 @@ export default {
 
   .active {
     /deep/ .van-grid-item__text {
-      color: red !important;
+      color: blue !important;
     }
   }
 }

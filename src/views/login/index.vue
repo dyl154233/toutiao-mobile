@@ -77,7 +77,7 @@ export default {
   data () {
     return {
       user: {
-        mobile: '17090086870', // 手机号
+        mobile: '', // 手机号
         code: '246810' // 验证码
       },
       formRules: {
