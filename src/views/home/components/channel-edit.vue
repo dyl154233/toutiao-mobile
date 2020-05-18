@@ -16,9 +16,9 @@
     <van-grid :gutter="10">
       <van-grid-item
         class="grid-item"
-        v-for="value in 8"
-        :key="value"
-        text="文字"
+        v-for="(channel, index) in userChannels"
+        :key="index"
+        :text="channel.name"
       />
     </van-grid>
 
@@ -32,27 +32,56 @@
     <van-grid :gutter="10">
       <van-grid-item
         class="grid-item"
-        v-for="value in 8"
-        :key="value"
-        text="文字"
+        v-for="(channel, index) in recommendChannels"
+        :key="index"
+        :text="channel.name"
+        @click="onAdd(channel)"
       />
     </van-grid>
   </div>
 </template>
 
 <script>
+import { getAllChannels } from '@/api/channel'
+
 export default {
   name: 'ChannelEdit',
   components: {},
-  props: {},
-  data () {
-    return {}
+  props: {
+    userChannels: {
+      type: Array,
+      required: true
+    }
   },
-  computed: {},
+  data () {
+    return {
+      allChannels: [] // 所有频道数据列表
+    }
+  },
+  computed: {
+    recommendChannels () {
+      return this.allChannels.filter(channel => {
+        return !this.userChannels.find(userChannel => {
+          return userChannel.id === channel.id
+        })
+      })
+    }
+  },
   watch: {},
-  created () {},
+  created () {
+    this.loadAllChannels()
+  },
   mounted () {},
-  methods: {}
+  methods: {
+    async loadAllChannels () {
+      const { data } = await getAllChannels()
+      this.allChannels = data.data.channels
+    },
+    onAdd (channel) {
+      this.userChannels.push(channel)
+      // TODO: 数据持久化
+    }
+  }
 }
 </script>
 
